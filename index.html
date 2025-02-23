@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TG-ANMOL-LIVE</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.13.3/shaka-player.compiled.js"></script>
+  <style>
+    /* Basic styles for the player */
+    #video {
+      width: 100%;
+      height: 100%;
+      max-width: 640px;
+      max-height: 360px;
+      background-color: black;
+    }
+
+    /* Styling the Telegram button */
+    .telegram-button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background-color: #0088cc;
+      color: white;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <video id="video" controls></video>
+
+  <!-- Telegram Button with updated link -->
+  <a href="https://t.me/+e6G48oujQuExOTg1" target="_blank">
+    <button class="telegram-button">Join Our Telegram Channel</button>
+  </a>
+
+  <script>
+    // Initialize Shaka Player when the window loads
+    window.onload = function() {
+      // Check if Shaka Player is available
+      if (shaka.Player.isBrowserSupported()) {
+        // Create a new player
+        var video = document.getElementById('video');
+        var player = new shaka.Player(video);
+
+        // Listen for error events
+        player.addEventListener('error', onErrorEvent);
+
+        // Configure ClearKey DRM support with provided keys
+        player.configure({
+          drm: {
+            servers: {
+              'clearkey': 'https://cdm.clearkey.server/clearkey', // Replace with your actual ClearKey license server URL
+            },
+            clearKeys: {
+              // Define the ClearKey keys here (replace with actual key pairs)
+              '7641daa5bacfbb61936c40a221c9e78e': '5732dd242f28338e909dc06cb1a1e5a2'
+            }
+          }
+        });
+
+        // Load your MPD URL (with the provided URL and ClearKey in the configuration)
+        player.load('https://live5.shoq.com.pk/live/eds/Geo_Super/DASH/Geo_Super.mpd?clearkey1=7641daa5bacfbb61936c40a221c9e78e:5732dd242f28338e909dc06cb1a1e5a2').then(function() {
+          console.log('The video has successfully loaded!');
+        }).catch(onError);
+
+      } else {
+        console.error('Browser not supported');
+      }
+    };
+
+    // Function to handle errors
+    function onError(error) {
+      console.error('Error loading the video:', error);
+    }
+
+    // Function to handle error events
+    function onErrorEvent(event) {
+      var error = event.detail;
+      console.error('Error event', error);
+    }
+  </script>
+</body>
+</html>
